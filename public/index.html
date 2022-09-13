@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Todo App in Deno</title>
+
+  <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+  <script src="/scripts/app.js"></script>
+</head>
+<body x-data="taskApp()" x-init="loadTasks()">
+  <div class="max-w-xl mx-auto px-3">
+    <h1 class="text-center text-3xl py-5">Todo App</h1>
+    <div class="flex my-4">
+      <input type="text" 
+             x-model="newTask.description" 
+             class="flex-auto appearance-none shadow rounded py-2 px-3 mr-4 text-grey-darker" 
+             placeholder="Description" />
+      <button @click="createTask" 
+              class="transition text-white bg-gradient-to-bl from-blue-500 via-blue-600 to-blue-700 font-medium rounded text-sm px-5 py-2 text-center hover:-translate-y-1 hover:drop-shadow">
+        Add
+      </button>
+    </div>
+    <div>
+      <ul>
+        <template x-for="task in tasks">
+          <div class="flex gap-4 items-center py-3 px-2">
+            <input type="checkbox" 
+                   class="flex-none"
+                   x-model="task.complete"
+                   @change="updateTaskComplete(task)"/>
+            <input type="text"
+                   class="flex-auto"
+                   :class="editingTaskId === task.id ? 'form-input rounded shadow text-grey-darker' : 'border-0 p-0'"
+                   x-model="task.description"
+                   :readonly="editingTaskId !== task.id"/>
+            <!-- Buttons to show on the task when not editing -->
+            <template x-if="editingTaskId !== task.id">
+              <div class="flex gap-4">
+                <button class="transition text-sm font-medium hover:-translate-y-0.5 hover:text-gray-600" @click="editingTaskId = task.id">Edit</button>
+                <button class="transition text-sm font-medium text-red-600 hover:-translate-y-0.5 hover:text-red-400" @click="deleteTask(task)">Delete</button>
+              </div>
+            </template>
+            <!-- Buttons to show on the task when editing-->
+            <template x-if="editingTaskId === task.id">
+              <div class="flex gap-4">
+                <button class="transition text-sm font-medium hover:-translate-y-0.5 hover:text-gray-600" @click="editingTaskId = null">Cancel</button>
+                <button class="transition text-sm font-medium text-green-600 hover:-translate-y-0.5 hover:text-green-400" @click="updateTask(task)">Save</button>
+              </div>
+            </template>
+          </div>
+        </template>
+      </ul>
+    </div>
+  </div>
+</body>
+</html>
