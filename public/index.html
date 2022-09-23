@@ -25,35 +25,33 @@
       </button>
     </div>
     <div>
-      <ul>
-        <template x-for="task in tasks">
-          <div class="flex gap-4 items-center py-3 px-2">
-            <input type="checkbox" 
-                   class="flex-none"
-                   x-model="task.complete"
-                   @change="updateTaskComplete(task)"/>
-            <input type="text"
-                   class="flex-auto"
-                   :class="editingTaskId === task.id ? 'form-input rounded shadow text-grey-darker' : 'border-0 p-0'"
-                   x-model="task.description"
-                   :readonly="editingTaskId !== task.id"/>
-            <!-- Buttons to show on the task when not editing -->
-            <template x-if="editingTaskId !== task.id">
-              <div class="flex gap-4">
-                <button class="transition text-sm font-medium hover:-translate-y-0.5 hover:text-gray-600" @click="editingTaskId = task.id">Edit</button>
-                <button class="transition text-sm font-medium text-red-600 hover:-translate-y-0.5 hover:text-red-400" @click="deleteTask(task)">Delete</button>
-              </div>
-            </template>
-            <!-- Buttons to show on the task when editing-->
-            <template x-if="editingTaskId === task.id">
-              <div class="flex gap-4">
-                <button class="transition text-sm font-medium hover:-translate-y-0.5 hover:text-gray-600" @click="editingTaskId = null">Cancel</button>
-                <button class="transition text-sm font-medium text-green-600 hover:-translate-y-0.5 hover:text-green-400" @click="updateTask(task)">Save</button>
-              </div>
-            </template>
-          </div>
-        </template>
-      </ul>
+      <template x-for="task in tasks">
+        <div class="flex gap-4 items-center py-3 px-2">
+          <input type="checkbox" 
+                 class="flex-none"
+                 x-model="task.complete"
+                 @change="updateTaskComplete(task)"/>
+          <input type="text"
+                 class="flex-auto"
+                 :class="editingTaskId === task.id ? 'form-input rounded shadow text-grey-darker' : 'border-0 p-0'"
+                 x-model="task.description"
+                 :readonly="editingTaskId !== task.id"/>
+          <!-- Buttons to show on the task when not editing -->
+          <template x-if="editingTaskId !== task.id">
+            <div class="flex gap-4">
+              <button class="transition text-sm font-medium hover:-translate-y-0.5 hover:text-gray-600" @click="editingTaskId = task.id">Edit</button>
+              <button class="transition text-sm font-medium text-red-600 hover:-translate-y-0.5 hover:text-red-400" @click="deleteTask(task)">Delete</button>
+            </div>
+          </template>
+          <!-- Buttons to show on the task when editing-->
+          <template x-if="editingTaskId === task.id">
+            <div class="flex gap-4">
+              <button class="transition text-sm font-medium hover:-translate-y-0.5 hover:text-gray-600" @click="editingTaskId = null">Cancel</button>
+              <button class="transition text-sm font-medium text-green-600 hover:-translate-y-0.5 hover:text-green-400" @click="updateTask(task)">Save</button>
+            </div>
+          </template>
+        </div>
+      </template>
     </div>
   </div>
 </body>
