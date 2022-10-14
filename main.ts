@@ -4,17 +4,15 @@ import {
   createTask,
   deleteTask,
   getAllTasks,
-  uncompleteTask,
   updateTask,
 } from "./tasks.ts";
 
 const app = new Application();
 
 app.get("/api/tasks", getAllTasks);
-app.post("/api/tasks/:id/complete", completeTask);
-app.delete("/api/tasks/:id/complete", uncompleteTask);
+app.patch("/api/tasks/:id/complete", completeTask);
 app.post("/api/tasks", createTask);
-app.put("/api/tasks/:id", updateTask);
+app.patch("/api/tasks/:id", updateTask);
 app.delete("/api/tasks/:id", deleteTask);
 
 app.static("/", "public");

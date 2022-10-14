@@ -45,11 +45,12 @@ export const createTask: HandlerFunc = async (ctx: Context) => {
   return ctx.json(newTask, 200);
 };
 
-/** Marks the specified task as complete and saves it to the JSON file */
+/** Marks the specified task as complete or incomplete and saves it to the JSON file */
 export const completeTask: HandlerFunc = async (ctx: Context) => {
   // Retrieve the task ID that should be completed
   const { id } = ctx.params;
-
+  const { complete } = (await ctx.body) as Task;
+  
   const tasks = await readTasks();
 
   // Find the specified task in the list of saved tasks. If the task is
@@ -62,34 +63,8 @@ export const completeTask: HandlerFunc = async (ctx: Context) => {
 
   // If the task is found, set it to complete and update the completed date
   // to the current date
-  tasks[index].complete = true;
-  tasks[index].completedDate = new Date();
-
-  await saveTasks(tasks);
-
-  // Return the completed task
-  return ctx.json(tasks[index], 200);
-};
-
-/** Marks the specified task as incomplete and saves it to the JSON file */
-export const uncompleteTask: HandlerFunc = async (ctx: Context) => {
-  // Retrieve the task ID that should be marked as incomplete
-  const { id } = ctx.params;
-
-  const tasks = await readTasks();
-
-  // Find the specified task in the list of saved tasks. If the task is
-  // not found, return a 404 response
-  const index = tasks.findIndex((t) => t.id == id);
-
-  if (index === -1) {
-    return ctx.json({ message: "Task not found" }, 404);
-  }
-
-  // If the task is found, set it to incomplete and clear the completed
-  // date
-  tasks[index].complete = false;
-  tasks[index].completedDate = null;
+  tasks[index].complete = complete;
+  tasks[index].completedDate = complete ? new Date() : null;
 
   await saveTasks(tasks);
 

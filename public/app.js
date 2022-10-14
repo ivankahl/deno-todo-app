@@ -3,7 +3,7 @@
  * @param {Array} tasks The array of tasks to sort and format
  * @returns
  */
-function sortTasks(tasks) {
+ function sortTasks(tasks) {
   return tasks.sort((a, b) => (a.complete > b.complete) ? 1 : -1);
 }
 
@@ -40,20 +40,18 @@ function taskApp() {
       this.newTask.description = "";
     },
     async updateTaskComplete(task) {
-      let result = null;
-
+  const result = await fetch(`/api/tasks/${task.id}/complete`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json;charset=utf-8",
+    },
+    body: JSON.stringify({
       // Remember we bind .complete to the checkbox. So if they checked
       // the box, it means we need to complete the task. If they unchecked
       // the task we need to uncomplete the task
-      if (task.complete) {
-        result = await fetch(`/api/tasks/${task.id}/complete`, {
-          method: "POST",
-        });
-      } else {
-        result = await fetch(`/api/tasks/${task.id}/complete`, {
-          method: "DELETE",
-        });
-      }
+      complete: task.complete
+    })
+  });
 
       // Replace the task
       const index = this.tasks.findIndex((x) => x.id == task.id);
@@ -63,7 +61,7 @@ function taskApp() {
     },
     async updateTask(task) {
       const result = await fetch(`/api/tasks/${task.id}`, {
-        method: "PUT",
+        method: "PATCH",
         headers: {
           "Content-Type": "application/json;charset=utf-8",
         },
